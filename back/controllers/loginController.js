@@ -21,8 +21,17 @@ export default async function loginController(req, res) {
 
       // checker password
 
+      if (password === user.password) {
+        res
+          .status(200)
+          .send({ message: "connexion effectué !", req: req.session });
+        return;
+      }
+      res
+        .status(400)
+        .send({ message: "les mots de passes ne correcspondent pas !" });
+
       console.log(req.session);
-      res.status(200).send({ message: "utilisateur trouvé", req: req.session });
     } else {
       res.status(400).send({ message: "l'utilisateur n'existe pas !" });
       return;
