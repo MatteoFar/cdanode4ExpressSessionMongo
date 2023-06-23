@@ -9,24 +9,23 @@ export default async function loginController(req, res) {
     const user = await UserModel.findOne({ email });
 
     if (user !== null) {
-      // création de la session et redirection vers le dashboard
-
-      // vérification password
+      // vérification password et decryptage du password
       const passwordDecrypted = CryptoJS.AES.decrypt(
         user.password,
         process.env.SECRET_CRYPTO_KEY
       ).toString(CryptoJS.enc.Utf8);
 
       if (password === passwordDecrypted) {
+        // création de la session
         req.session.auth = true;
         res
           .status(200)
-          .send({ message: "connexion effectué !", req: req.session });
+          .send({ message: "connexion effectuée !", req: req.session });
         return;
       }
       res
         .status(400)
-        .send({ message: "les mots de passes ne correcspondent pas !" });
+        .send({ message: "les mots de passes ne correspondent pas !" });
     } else {
       res.status(400).send({ message: "l'utilisateur n'existe pas !" });
       return;
